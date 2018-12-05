@@ -1,0 +1,49 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    container_name: nginx_server
+    restart: always
+    ports:
+      - "80:80"
+      - "10000:10000"
+    links:
+      - "phpfpm7.2"
+    volumes:
+      - ./app/:/var/www/html/
+      - ./nginx/conf.d/:/etc/nginx/conf.d
+      - ./data/log/nginx_error.log:/var/log/nginx/error.log
+      - ./data/log/:/home/wwwlogs
+  phpfpm7.2:
+    build: ./phpfpm
+    container_name: phpfpm_server
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+       - ./app/:/var/www/html/
+    links:
+      - "mysql"
+  mysql:
+    build: ./mysql
+    container_name: mysql_server
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD : 123456
+  redis:
+    build: ./redis
+    container_name: redis_server
+    restart: always
+    volumes:
+      - ./data/redis:/data
+    ports:
+      - "6379:6379"
+  composer:
+    image: composer
+    container_name: php_composer
+    volumes:
+      - ./app:/app:rw
