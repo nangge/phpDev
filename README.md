@@ -8,6 +8,7 @@
 #docker-compose up -d //守护进程
 #docker-compose up -d --build //重新编译启动
 ```
+首次编译可能需要较长时间，编译启动后通过浏览器访问localhost 或者 宿主机ip就可以看到php环境信息。
 ## 环境支持
 - php-fpm7.2
 - mysql5.6
